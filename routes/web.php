@@ -20,8 +20,13 @@ use App\Http\Controllers\TasksController;
  Route::get('/', [TasksController::class, 'home']);
 Route::get('/index', [TasksController::class, 'index']);
 Route::get('create', [TasksController::class, 'create']);
-Route::get('/{id}/edit', [TasksController::class, 'edit']);
-Route::get('/update', [TasksController::class, 'update']);
-Route::post('upload', [TasksController::class, 'upload']);
-Route::get('/{id}/completed', [TasksController::class, 'completed']);
-Route::get('/{id}/delete', [TasksController::class, 'delete']);
+Route::get('/{id}/edit', [TasksController::class, 'edit'])->name('edit');
+Route::patch('/{id}/update', [TasksController::class, 'update'])->name('update');
+Route::post('upload', [TasksController::class, 'upload'])->name('upload');
+Route::get('/{id}/completed', [TasksController::class, 'completed'])->name('completed');
+Route::get('/{id}/delete', [TasksController::class, 'delete'])->name('delete');
+
+
+
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

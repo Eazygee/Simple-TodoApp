@@ -6,14 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\Task;
 class TasksController extends Controller
 {
-    public function index(){
-        $tasks = Task::orderBy('completed')->get();
-        return view ('todo.index')->with(['tasks' => $tasks]);
-
-     }
+    // public function index(){
+    //     $tasks = Task::latest()->get();
+        
+    //  }
 
         public function home(){
-            return view('home');
+            $tasks = Task::latest()->get();
+            return view ('home')->with(['tasks' => $tasks]);
+
         }
 
         public function create(){
@@ -22,16 +23,22 @@ class TasksController extends Controller
 
             public function upload(Request $req){
                 $req->validate([
-                    'title' => 'required|max:255'
+                    'title' => 'required|max:255',
+                    
                 ]);
-                $task = $req->title;
-                Task::create(['title' => $task]);
-                if ($task instanceof Task){
                 
-                }
-                toastr()->success('Task created successfully!');
+                
+                 if ($task = $req->title){
+                    
+                   $task = Task::create([
+                    'title' => $req->title,
+                    'completed' => 0,
+                ]);
+                    toastr()->success('Task created successfully!');
+                 }
+                
 
-                return back();
+                return redirect("/");
             }
 
             public function edit($id){
@@ -47,39 +54,40 @@ class TasksController extends Controller
 
                 $updatetask = Task::find($req ->id);
                 $updatetask -> update(['title' => $req->title]);
-                if ($updatetask instanceof task) {
-                    toastr()->success('Task updated successfully!');
+                 if ($updatetask instanceof task) {
+                     toastr()->success('Task updated successfully!');
         
-                    return redirect('/index');
-                }
+                    return redirect('/');
+                 }
         
-
-        
-                return redirect('/index');
             }
 
             public function completed($id){
                 $task = Task::find($id);
-                if($task->completed instanceof task){
-                    $task->update(['completed' =>true ]);
-                    toastr()->success('Task marked as complete');
-                    return redirect()->back();
-                }else
-                {
-                    
-                    $task->update(['completed' => false  ]);
-                    toastr()->success('Task marked incomplete');
-                    return redirect()->back();
+                if($task->completed){
+                    $task->update(['completed' => 0 ]);
+                    toastr()->success('Unmarked');
+                    return redirect('/');
+                }else{
+                    $task->update(['completed' => 1 ]);
+                    toastr()->success('Marked');
+                        return redirect('/');
                 }
             }
 
                 public function delete($id){
                     $task = Task::find($id);
-                    $task->delete();
+                     $task->delete();              
                     if ($task instanceof task) {
-                        toastr()->success('Task deleted successfully!');
-                    return redirect()->back();
+                        toastr()->error('Task deleted');
+                        return redirect('/');     
                     }
                 }
-}
 
+                // public function modal(){
+                //     $task = Task::find('id');
+                //     return view("todo.modal")->with(['task' => $task]);
+                // }
+
+                
+            }
