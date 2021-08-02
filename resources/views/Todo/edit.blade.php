@@ -2,7 +2,7 @@
 @section('content')
     <div class="w-100 h-100 d-flex justify-content-center align-items-center">
         <div class="text-center" style="width:40%">
-            <h1 class="display-4 text-white">Edit your Todo called{{$task->title}}</h1>
+            <h1 class="display-4 text-white">Edit your Todo called: {{$task->title}}</h1>
            
             <form action="{{route('update', $task->id)}}" method="POST">
                 @method('PATCH')

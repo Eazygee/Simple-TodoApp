@@ -66,7 +66,7 @@ class TasksController extends Controller
                 $task = Task::find($id);
                 if($task->completed){
                     $task->update(['completed' => 0 ]);
-                    toastr()->success('Unmarked');
+                    toastr()->warning('Unmarked');
                     return redirect('/');
                 }else{
                     $task->update(['completed' => 1 ]);
